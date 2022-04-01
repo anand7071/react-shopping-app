@@ -8,6 +8,7 @@ export const Products = () => {
 
     const [products, setproducts] = useState([])
     const [filter, setFilter] = useState([]);
+    const [data,setData]= useState([])
     let componentMounted = true;
 
     const getData = async () => {
@@ -22,6 +23,17 @@ export const Products = () => {
         }
 
     }
+    const hanldeclick = async(id)=>{
+        
+        const response = await fetch(`https://movie-fake-server.herokuapp.com/products?id=${id}`);
+        setData(await response.json())
+        console.log(data)
+        return(
+            <>
+                {data.id}
+            </>
+        )
+    }
 
     useEffect(() => {
         getData()
@@ -31,16 +43,17 @@ export const Products = () => {
             <>
                 {
                     filter.map((items) => {
+                        let {id,brand,title,image,cat,price} = items
                         return (
                             <>
-                                <div className="col-10 col-md-4 mt-5">
-                                    <div className="card" style={{ width: "18rem" }} key={items.id}>
-                                        <img src={items.image} className="card-img-top" alt="..." />
+                                <div className="col-10 col-md-4 mt-5" key={id}>
+                                    <div className="card" style={{ width: "18rem" }}>
+                                        <img src={image} className="card-img-top" alt="..." />
                                         <div className="card-body">
-                                            <h5 className="card-title">{items.title}</h5>
-                                            <p className="card-text">{items.brand}</p>
-                                            <p className="card-text">Rs.{items.price}</p>
-                                            <a href="/" className="btn btn-primary">Add to cart</a>
+                                            <h5 className="card-title">{title}</h5>
+                                            <p className="card-text">{brand}</p>
+                                            <p className="card-text">Rs.{price}</p>
+                                            <a className="btn btn-primary" onClick={()=>hanldeclick(id)}>Add to cart</a>
                                         </div>
                                     </div>
                                 </div>
